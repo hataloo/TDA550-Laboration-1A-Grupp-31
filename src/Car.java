@@ -140,9 +140,9 @@ public abstract class Car implements Movable{
      *  Increase the current speed of the car by an amount multiplied by a speedfactor.
      *  The speed is the minimum of the current speed and the engine power
      *
-     * @param amount
+     * @param amount - the amount to increase currentSpeed by
      */
-    private void incrementSpeed(double amount){
+    protected void incrementSpeed(double amount){
         currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);
     }
 
@@ -150,9 +150,9 @@ public abstract class Car implements Movable{
      *  Decrease the current speed of the car by an amount multiplied by a speedfactor.
      *  The speed is the maximum of the current speed and zero
      *
-     * @param amount
+     * @param amount - The amount to decrement currentSpeed by
      */
-    private void decrementSpeed(double amount){
+    protected void decrementSpeed(double amount){
         currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount,0);
     }
 
@@ -161,7 +161,7 @@ public abstract class Car implements Movable{
      *
      * @param amount double in the range [0,1]
      */
-    void gas(double amount) {
+    public void gas(double amount) {
         if (amount <= 1 && amount >= 0) {
             incrementSpeed(amount);
         } else {
@@ -187,7 +187,7 @@ public abstract class Car implements Movable{
      *
      * @return double
      */
-    abstract double speedFactor();
+    protected abstract double speedFactor();
 
 
 }

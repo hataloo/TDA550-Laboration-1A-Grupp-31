@@ -1,14 +1,18 @@
+import com.sun.deploy.security.SelectableSecurityManager;
+
 import java.awt.*;
 
-public class Scania extends Car{
+public class Scania extends FlatbedCar{
 
     /**
      * The angle of the flatbed
      */
+    private static final double MAX_FLATBED_ANGLE = 70;
+    private static final double MIN_FLATBED_ANGLE = 0;
     private double flatbedAngle;
 
     /**
-     * Instantiates new Scania
+     * Instantiates new Scania with default values.
      */
     public Scania(){
         this.nrDoors = 3;
@@ -16,17 +20,16 @@ public class Scania extends Car{
         this.enginePower =90;
         this.modelName = "Scania";
         this.flatbedAngle=0;
-        stopEngine();
     }
 
-    /**
-     * Get flatbed angle
-     *
-     * @return double
-     */
-    public double getFlatbedAngle(){
-        return flatbedAngle;
+    protected boolean flatbedInDriveablePosition(){
+        if(this.flatbedAngle==0){
+            return true;
+        }
+        else
+            return false;
     }
+
     /**
      * Compute the speedfactor.
      *
@@ -50,41 +53,55 @@ public class Scania extends Car{
     }
 
     /**
-     *  Decrease the current speed of the car by an amount multiplied by a speedfactor.
-     *  The speed is the maximum of the current speed and zero
+     * Get flatbed angle
      *
-     * @param amount - The amount to gas, must be in [0,1]
+     * @return double
      */
-    @Override
-    public void gas(double amount) {
-        if (amount <= 1 && amount >= 0 && this.flatbedAngle == 0) {
-            this.incrementSpeed(amount);
-        }else if(this.flatbedAngle != 0){
-            throw new IllegalStateException("The flatbed angle must be zero to increase the speed of the truck.");
-        }
-        else {
-            throw new IllegalArgumentException("Gas accepts values of amount between 0 and 1.");
-        }
+    public double getFlatbedAngle(){
+        return flatbedAngle;
     }
 
-    /**
-     * Set flatbed angle
-     *
-     * @param newAngle of the flatbed
-     */
-    public void setFlatbedAngle(double newAngle) {
-        if (this.currentSpeed != 0){
+    @Override
+    public void raiseFlatbed(){
+        if(this.currentSpeed != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
         }
-        else if (newAngle <= 70 && newAngle >= 0) {
-            this.flatbedAngle = newAngle;
-        }
-        else{
-            throw new IllegalArgumentException("Flatbedangle needs to be between 0 and 70");
-        }
+        this.flatbedRaised = true;
+        this.flatbedAngle = MAX_FLATBED_ANGLE;
     }
 
+    public void raiseFlatbed(double increasedAngle){
+        double newAngle = this.flatbedAngle + increasedAngle;
+        if(this.currentSpeed != 0){
+            throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
+        }
+        else if(increasedAngle <=0) {
+            throw new IllegalArgumentException("The increased angle needs to be larger than 0.");
+        }
+        else{ this.flatbedAngle = Math.min(newAngle, MAX_FLATBED_ANGLE);
+        this.flatbedRaised = true;}
+    }
+    @Override
+    public void lowerFlatbed(){
+        if(this.currentSpeed != 0){
+            throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
+        }
+        this.flatbedRaised = false;
+        this.flatbedAngle = MIN_FLATBED_ANGLE;
+    }
 
-
+    public void lowerFlatbed(double decreasedAngle){
+        double newAngle = this.flatbedAngle - decreasedAngle;
+        if(this.currentSpeed != 0){
+            throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
+        }
+        else if(decreasedAngle < 0) {
+            throw new IllegalArgumentException("The decreased angle needs to be larger than 0.");
+        }
+        else{
+            this.flatbedAngle = Math.max(newAngle, MIN_FLATBED_ANGLE);
+            if(this.flatbedAngle==0){this.flatbedRaised = false;}
+        }
+    }
 
 }

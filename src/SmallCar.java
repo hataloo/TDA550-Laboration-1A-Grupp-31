@@ -5,7 +5,7 @@ public abstract class SmallCar extends Car {
         this.LoadedOntoTransport = false;
     }
 
-    public void setLoadedOntoTransport(boolean status){
+    protected void setLoadedOntoTransport(boolean status){
         this.LoadedOntoTransport = status;
     }
 

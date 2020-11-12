@@ -6,6 +6,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses(   {testSaab95.class,
                         testVolvo240.class,
                         testScania.class,
-                        testCarTransport.class})
+                        testCarTransport.class,
+                        testCarWorkshop.class})
 public class testAll {
 }

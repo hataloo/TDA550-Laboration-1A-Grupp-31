@@ -62,7 +62,7 @@ public class CarWorkshop<T extends Car> {
      * @param args the args
      */
     public void main(String[] args){
-        //Used to demonstrate static errors.
+        //Used to demonstrate static errors by changing the static types.
         CarWorkshop<SmallCar> mySaabWorkshop = new CarWorkshop<>();
         Saab95 myFavoriteCar = new Saab95();
         Volvo240 mySecondFavoriteCar = new Volvo240();

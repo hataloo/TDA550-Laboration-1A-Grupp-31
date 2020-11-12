@@ -4,11 +4,11 @@ import java.lang.Math;
 /**
  * The type Car transport.
  */
-public class CarTransport extends FlatbedCar {
+public class CarTransport extends FlatbedCar{
     private static final int MAX_STORAGE_CAPACITY = 10;
     private LinkedList<SmallCar> storedCars;
 
-
+    // Implementera transportable.
     /**
      * Instantiates a new Car transport.
      */

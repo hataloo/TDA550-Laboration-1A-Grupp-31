@@ -2,6 +2,9 @@ import com.sun.deploy.security.SelectableSecurityManager;
 
 import java.awt.*;
 
+/**
+ * The type Scania.
+ */
 public class Scania extends FlatbedCar{
 
     /**
@@ -22,6 +25,10 @@ public class Scania extends FlatbedCar{
         this.flatbedAngle=0;
     }
 
+    /**
+     * Returns true if flatbedAngle is 0.
+     * @return boolean
+     */
     protected boolean flatbedInDriveablePosition(){
         if(this.flatbedAngle==0){
             return true;
@@ -55,12 +62,16 @@ public class Scania extends FlatbedCar{
     /**
      * Get flatbed angle
      *
-     * @return double
+     * @return double double
      */
     public double getFlatbedAngle(){
         return flatbedAngle;
     }
 
+    /**
+     * raise the Flatbed to its greatest angle
+     *
+     */
     @Override
     public void raiseFlatbed(){
         if(this.currentSpeed != 0){
@@ -70,6 +81,11 @@ public class Scania extends FlatbedCar{
         this.flatbedAngle = MAX_FLATBED_ANGLE;
     }
 
+    /**
+     * Increase the flatbed by an angle given as argument
+     *
+     * @param increasedAngle is the angle which the flatbed increases
+     */
     public void raiseFlatbed(double increasedAngle){
         double newAngle = this.flatbedAngle + increasedAngle;
         if(this.currentSpeed != 0){
@@ -81,6 +97,11 @@ public class Scania extends FlatbedCar{
         else{ this.flatbedAngle = Math.min(newAngle, MAX_FLATBED_ANGLE);
         this.flatbedRaised = true;}
     }
+
+    /**
+     * lower the angle of the flatbed to its lowest degree
+     *
+     */
     @Override
     public void lowerFlatbed(){
         if(this.currentSpeed != 0){
@@ -90,6 +111,11 @@ public class Scania extends FlatbedCar{
         this.flatbedAngle = MIN_FLATBED_ANGLE;
     }
 
+    /**
+     * Lower flatbed by an angle given as argument.
+     *
+     * @param decreasedAngle the angle which the flatbed is decreased
+     */
     public void lowerFlatbed(double decreasedAngle){
         double newAngle = this.flatbedAngle - decreasedAngle;
         if(this.currentSpeed != 0){

@@ -1,25 +1,44 @@
 import java.util.LinkedList;
+import java.lang.Math;
 
+/**
+ * The type Car transport.
+ */
 public class CarTransport extends FlatbedCar {
     private static final int MAX_STORAGE_CAPACITY = 10;
     private LinkedList<SmallCar> storedCars;
-    private int storageCapacity;
 
+
+    /**
+     * Instantiates a new Car transport.
+     */
     public CarTransport() {
         this.storedCars = new LinkedList<SmallCar>();
     }
 
+    /**
+     * Load car.
+     *
+     * @param carToLoad the car to load
+     */
     public void loadCar(SmallCar carToLoad) {
         if (carOkToLoad(carToLoad)) {
             carToLoad.xPosition = this.xPosition;
             carToLoad.yPosition = this.yPosition;
+            carToLoad.setLoadedOntoTransport(true);
             storedCars.push(carToLoad);
         }
     }
 
-    public Car unloadCar() {
+    /**
+     * Unload car small car.
+     *
+     * @return the small car
+     */
+    public SmallCar unloadCar() {
         if (!this.flatbedRaised && !storedCars.isEmpty()) {
-            Car carToUnload = storedCars.pop();
+            SmallCar carToUnload = storedCars.pop();
+            carToUnload.setLoadedOntoTransport(false);
             carToUnload.xPosition = this.xPosition;
             carToUnload.yPosition = this.yPosition;
 
@@ -31,12 +50,17 @@ public class CarTransport extends FlatbedCar {
         }
     }
 
-
+    /**
+     * Checks that the car fullfills the requirements to be loaded.
+     *
+     * @param car - The car to be loaded
+     * @return - boolean
+     */
     private boolean carOkToLoad(SmallCar car) {
         double threshold = 0.1;
         if (car.hashCode() == this.hashCode()) {
             throw new IllegalStateException("Cannot load self");
-        } else if (car.xPosition - this.xPosition >= threshold && car.yPosition - this.yPosition >= threshold) {
+        } else if (Math.abs(car.xPosition - this.xPosition) >= threshold || Math.abs(car.yPosition - this.yPosition) >= threshold) {
             throw new IllegalArgumentException("Car to load must be closer to CarTransport");
         } else if (this.flatbedRaised) {
             throw new IllegalStateException("Cannot load while flatbed is raised");
@@ -46,6 +70,10 @@ public class CarTransport extends FlatbedCar {
         return true;
     }
 
+    /**
+     * Returns true if flatbed is raised.
+     * @return - boolean
+     */
     protected boolean flatbedInDriveablePosition(){
         if(this.flatbedRaised){
             return true;
@@ -53,6 +81,7 @@ public class CarTransport extends FlatbedCar {
         else
             return false;
     }
+
     /**
      * Compute the speedfactor.
      *

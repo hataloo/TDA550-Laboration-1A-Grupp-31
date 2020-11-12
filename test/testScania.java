@@ -13,23 +13,17 @@ public class testScania {
     }
 
     @Test
-    public void testSetFlatbedAngle(){
+    public void testRaiseFlatbed(){
         Scania scania = new Scania();
-        scania.setFlatbedAngle(70);
+        scania.raiseFlatbed();
         assertEquals(70,scania.getFlatbedAngle(),0.001);
-    }
-
-    @Test
-    public void testSetFlatbedAngleThrowsIllegalArgumentException(){
-        Scania scania = new Scania();
-        assertThrows(IllegalArgumentException.class,() -> {scania.setFlatbedAngle(80);});
     }
 
     @Test
     public void testSetFlatbedAngleThrowsIllegalStateException(){
         Scania scania = new Scania();
         scania.startEngine();
-        assertThrows(IllegalStateException.class,() -> {scania.setFlatbedAngle(10);});
+        assertThrows(IllegalStateException.class,() -> {scania.raiseFlatbed(10);});
     }
 
     @Test

@@ -1,18 +1,33 @@
-
+/**
+ * The type Flatbed car.
+ */
 public abstract class FlatbedCar extends Car{
 
+    /**
+     * The Flatbed raised.
+     */
     protected boolean flatbedRaised;
 
+    /**
+     * Instantiates a new Flatbed car.
+     */
     public FlatbedCar(){
         this.flatbedRaised = false;
     }
 
+    /**
+     * Raise flatbed.
+     */
     public void raiseFlatbed(){
         if(this.currentSpeed != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
         }
         this.flatbedRaised = true;
     }
+
+    /**
+     * Lower flatbed.
+     */
     public void lowerFlatbed(){
         if(this.currentSpeed != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
@@ -20,9 +35,15 @@ public abstract class FlatbedCar extends Car{
         this.flatbedRaised = false;
     }
 
+    /**
+     * Get flatbed raised boolean.
+     *
+     * @return the boolean
+     */
     public boolean getFlatbedRaised(){
         return this.flatbedRaised;
     }
+
     /**
      *  Decrease the current speed of the car by an amount multiplied by a speedfactor.
      *  The speed is the maximum of the current speed and zero
@@ -44,6 +65,11 @@ public abstract class FlatbedCar extends Car{
         }
     }
 
+    /**
+     * Flatbed in driveable position boolean.
+     *
+     * @return the boolean
+     */
     protected abstract boolean flatbedInDriveablePosition();
 
 

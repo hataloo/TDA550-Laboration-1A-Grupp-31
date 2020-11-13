@@ -24,7 +24,7 @@ public class testCarTransport {
     }
 
     @Test
-    public void testCarOkToLoad_flatbedRaised(){
+    public void testCarOkToLoadThrowsExceptionIfFlatbedIsRaised(){
         CarTransport carTransport = new CarTransport();
         Saab95 saab95 = new Saab95();
 
@@ -34,7 +34,7 @@ public class testCarTransport {
     }
 
     @Test
-    public void testUnLoadCar() {
+    public void testUnLoadCarThrowsIllegalStateExceptionWhenEmpty() {
         CarTransport carTransport = new CarTransport();
         Volvo240 volvo = new Volvo240();
         carTransport.loadTransportable(volvo);

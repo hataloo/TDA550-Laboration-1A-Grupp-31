@@ -31,6 +31,7 @@ public class testSaab95 {
         saab95.startEngine();
         assertEquals(0.1,saab95.getCurrentSpeed(),0.001);
     }
+
     @Test
     public void testTurboOn(){
         Saab95 saab95 = new Saab95();
@@ -38,6 +39,7 @@ public class testSaab95 {
         saab95.setTurboOn();
         assertEquals(125*0.01*1.3, saab95.speedFactor(),0.001);
     }
+
     @Test
     public void testTurboOff(){
         Saab95 saab95 = new Saab95();
@@ -46,38 +48,45 @@ public class testSaab95 {
         saab95.setTurboOff();
         assertEquals(125*0.01*1, saab95.speedFactor(),0.001);
     }
+
     @Test
     public void testGetNrDoors(){
         Saab95 saab95 = new Saab95();
         assertEquals(saab95.getNrDoors(),2);
     }
+
     @Test
     public void testEnginePower(){
         Saab95 saab95 = new Saab95();
         assertEquals(125,saab95.getEnginePower(),0.001);
     }
+
     @Test
     public void testGetCurrentSpeed(){
         Saab95 saab95 = new Saab95();
         assertEquals(0,saab95.getCurrentSpeed(),0.01);
     }
+
     @Test
     public void testDirection(){
         Saab95 saab95 = new Saab95();
         assertEquals(0,saab95.getDirection());
     }
+
     @Test
     public void testTurnLeft(){
         Saab95 saab95 = new Saab95();
         saab95.turnLeft();
         assertEquals(3,saab95.getDirection());
     }
+
     @Test
     public void testTurnRight(){
         Saab95 saab95 = new Saab95();
         saab95.turnRight();
         assertEquals(1,saab95.getDirection());
     }
+
     @Test
     public void testMove(){
         Saab95 saab95 = new Saab95();
@@ -85,6 +94,7 @@ public class testSaab95 {
         saab95.move();
         assertEquals(0.1,saab95.getYPosition(),0.01);
     }
+
     @Test
     public void testGas(){
         Saab95 saab95 = new Saab95();

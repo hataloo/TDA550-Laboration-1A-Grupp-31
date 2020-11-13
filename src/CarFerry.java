@@ -16,6 +16,9 @@ public class CarFerry extends Vehicle implements Transporter<Car> {
         this.capacity = capacity;
         this.carsOnFerry = new ArrayList<Car>(this.capacity);
     }
+    public int getCapacity(){
+        return this.capacity;
+    }
 
     @Override
     public Car unloadTransportable() {
@@ -40,8 +43,32 @@ public class CarFerry extends Vehicle implements Transporter<Car> {
         }
     }
 
-    private boolean carOkToLoad(Car car) {
+    /**
+     * Move the position of the car in the direction it is facing
+     * with the current speed
+     */
+    @Override
+    public void move(){
+        int direction = this.getDirection();
+        double xPosition = this.getXPosition();
+        double yPosition = this.getYPosition();
+        double currentSpeed = this.getCurrentSpeed();
 
+        if(direction==0) this.setYPosition(yPosition + currentSpeed);
+
+        if(direction==1) this.setXPosition(xPosition + currentSpeed);
+
+        if(direction==2) this.setYPosition(yPosition - currentSpeed);
+
+        if(direction==3) this.setXPosition(xPosition - currentSpeed);
+
+        for (Car car : carsOnFerry) {
+            car.setXPosition(this.getXPosition());
+            car.setYPosition(this.getYPosition());
+        }
+    }
+
+    private boolean carOkToLoad(Car car) {
         if (Math.abs(car.getXPosition() - this.getXPosition()) >= threshold || Math.abs(car.getYPosition()- this.getYPosition()) >= threshold) {
             throw new IllegalArgumentException("Car to load must be closer to Ferry");}
         else

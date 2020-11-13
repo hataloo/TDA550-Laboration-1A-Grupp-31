@@ -11,11 +11,11 @@ public class Saab95 extends SmallCar{
      * Instantiates a new Saab 95.
      */
     public Saab95(){
-        this.nrDoors = 2;
-        this.color = Color.red;
-        this.enginePower = 125;
+        this.setNrDoors(2);
+        this.setColor(Color.red);
+        this.setEnginePower(125);
         this.turboOn = false;
-        this.modelName = "Saab95";
+        this.setModelName("Saab95");
         stopEngine();
     }
 
@@ -41,7 +41,7 @@ public class Saab95 extends SmallCar{
     protected double speedFactor(){
         double turbo = 1;
         if(turboOn) turbo = 1.3;
-        return enginePower * 0.01 * turbo;
+        return this.getEnginePower() * 0.01 * turbo;
     }
 }
 /**/

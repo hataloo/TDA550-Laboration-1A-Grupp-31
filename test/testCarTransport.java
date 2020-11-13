@@ -20,7 +20,7 @@ public class testCarTransport {
         saab95.gas(1);
         saab95.move();
 
-        assertThrows(IllegalArgumentException.class,() -> {carTransport.loadCar(saab95);});
+        assertThrows(IllegalArgumentException.class,() -> {carTransport.loadTransportable(saab95);});
     }
 
     @Test
@@ -30,16 +30,16 @@ public class testCarTransport {
 
         carTransport.raiseFlatbed();
 
-        assertThrows(IllegalStateException.class,() -> {carTransport.loadCar(saab95);});
+        assertThrows(IllegalStateException.class,() -> {carTransport.loadTransportable(saab95);});
     }
 
     @Test
     public void testUnLoadCar() {
         CarTransport carTransport = new CarTransport();
         Volvo240 volvo = new Volvo240();
-        carTransport.loadCar(volvo);
-        carTransport.unloadCar();
-        assertThrows(IllegalStateException.class,() ->{carTransport.unloadCar();});
+        carTransport.loadTransportable(volvo);
+        carTransport.unloadTransportable();
+        assertThrows(IllegalStateException.class,() ->{carTransport.unloadTransportable();});
     }
 
     @Test
@@ -49,10 +49,10 @@ public class testCarTransport {
         Saab95 car2= new Saab95();
 
         carTransport.lowerFlatbed();
-        carTransport.loadCar(car1);
-        carTransport.loadCar(car2);
+        carTransport.loadTransportable(car1);
+        carTransport.loadTransportable(car2);
 
-        SmallCar car3 = carTransport.unloadCar();
+        SmallCar car3 = carTransport.unloadTransportable();
 
         assertEquals(car2.hashCode(), car3.hashCode());
     }
@@ -61,9 +61,9 @@ public class testCarTransport {
     public void testMoveMovesLoadedCar(){
         CarTransport carTransport = new CarTransport();
         Volvo240 volvo = new Volvo240();
-        carTransport.loadCar(volvo);
+        carTransport.loadTransportable(volvo);
         carTransport.startEngine();
         carTransport.move();
-        assertEquals(carTransport.yPosition,volvo.yPosition,0.001);
+        assertEquals(carTransport.getYPosition(),volvo.getYPosition(),0.001);
     }
 }

@@ -28,7 +28,7 @@ public class testCarWorkshop {
         Saab95 saab95theSecond = new Saab95();
         carWorkshop.admitCar(saab95);
         carWorkshop.admitCar(saab95theSecond);
-        assertEquals(carWorkshop.returnCar(saab95),saab95);
+        assertEquals(carWorkshop.unloadTransportable(),saab95);
     }
 
     @Test
@@ -40,6 +40,6 @@ public class testCarWorkshop {
         carWorkshop.admitCar(saab95);
         carWorkshop.admitCar(volvo240);
 
-        assertEquals(saab95, carWorkshop.returnCar(saab95));
+        assertEquals(saab95, carWorkshop.unloadTransportable());
     }
 }

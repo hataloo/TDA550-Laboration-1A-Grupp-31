@@ -18,10 +18,10 @@ public class Scania extends FlatbedCar{
      * Instantiates new Scania with default values.
      */
     public Scania(){
-        this.nrDoors = 3;
-        this.color = Color.green;
-        this.enginePower =90;
-        this.modelName = "Scania";
+        this.setNrDoors(3);
+        this.setColor(Color.green);
+        this.setEnginePower(90);
+        this.setModelName("Scania");
         this.flatbedAngle=0;
     }
 
@@ -44,7 +44,7 @@ public class Scania extends FlatbedCar{
      */
     @Override
     protected double speedFactor(){
-        return enginePower * 0.01;
+        return this.getEnginePower() * 0.01;
     }
 
     /**
@@ -55,7 +55,7 @@ public class Scania extends FlatbedCar{
         if(flatbedAngle!=0)
             throw new IllegalStateException("The flatbed angle must be zero to start the engine.");
         else {
-            currentSpeed = 0.1;
+            this.setCurrentSpeed(0.1);
         }
     }
 
@@ -74,7 +74,7 @@ public class Scania extends FlatbedCar{
      */
     @Override
     public void raiseFlatbed(){
-        if(this.currentSpeed != 0){
+        if(this.getCurrentSpeed() != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
         }
         this.flatbedRaised = true;
@@ -88,7 +88,7 @@ public class Scania extends FlatbedCar{
      */
     public void raiseFlatbed(double increasedAngle){
         double newAngle = this.flatbedAngle + increasedAngle;
-        if(this.currentSpeed != 0){
+        if(this.getCurrentSpeed() != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
         }
         else if(increasedAngle <=0) {
@@ -104,7 +104,7 @@ public class Scania extends FlatbedCar{
      */
     @Override
     public void lowerFlatbed(){
-        if(this.currentSpeed != 0){
+        if(this.getCurrentSpeed() != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
         }
         this.flatbedRaised = false;
@@ -118,7 +118,7 @@ public class Scania extends FlatbedCar{
      */
     public void lowerFlatbed(double decreasedAngle){
         double newAngle = this.flatbedAngle - decreasedAngle;
-        if(this.currentSpeed != 0){
+        if(this.getCurrentSpeed() != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
         }
         else if(decreasedAngle < 0) {

@@ -4,47 +4,20 @@ import java.awt.*;
 /**
  * The type Car.
  */
-public abstract class Car implements Movable{
+public abstract class Car extends Vehicle implements Transportable {
     /**
      * The number of doors.
      */
-    protected int nrDoors; // Number of doors on the car
-    /**
-     * The Engine power.
-     */
-    protected double enginePower; // Engine power of the car
-    /**
-     * The Current speed.
-     */
-    protected double currentSpeed; // The current speed of the car
-    /**
-     * The Color.
-     */
-    protected Color color; // Color of the car
+    private int nrDoors; // Number of doors on the car
+
+    private Color color; // Color of the car
     /**
      * The Model name.
      */
-    protected String modelName; // The car model name
-    /**
-     * The X position.
-     */
-    protected double xPosition, /**
-     * The Y position.
-     */
-    yPosition;
-    /**
-     * The direction the car is facing, starting with north = 0 then going clock-wise
-     */
-    protected int direction;
+    private String modelName; // The car model name
 
-    // Constructors
-    /**
-     * Instantiates a new Car.
-     */
-    public Car(){
-        this.direction = 0;
-        stopEngine();
-    }
+    private boolean isLoadedOntoTransporter;
+
 
     // Getters & setters
     /**
@@ -52,142 +25,62 @@ public abstract class Car implements Movable{
      *
      * @return the int
      */
-    public int getNrDoors(){
+    public int getNrDoors() {
         return nrDoors;
     }
 
-    /**
-     * Get engine power double.
-     *
-     * @return the double
-     */
-    public double getEnginePower(){
-        return enginePower;
+    protected void setNrDoors(int nrDoors) {
+        this.nrDoors = nrDoors;
     }
 
-    /**
-     * Get current speed double.
-     *
-     * @return the double
-     */
-    public double getCurrentSpeed(){
-        return currentSpeed;
-    }
-
-    /**
-     * Get color color.
-     *
-     * @return the color
-     */
     public Color getColor(){
-        return color;
+        return this.color;
     }
 
-    /**
-     * Set color.
-     *
-     * @param clr the clr
-     */
-    public void setColor(Color clr){
-        color = clr;
+    protected void setColor(Color color){
+        this.color = color;
     }
 
-    // Methods
-    /**
-     * Start engine.
-     */
-    public void startEngine(){
-        currentSpeed = 0.1;
+    public String getModelName() {
+        return modelName;
     }
 
-    /**
-     * Stop engine.
-     */
-    public void stopEngine(){
-        currentSpeed = 0;
+    protected void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
-    /**
-     * Move the position of the car in the direction it is facing
-     * with the current speed
-     */
-    public void move(){
-        if(direction==0) yPosition += currentSpeed;
-
-        if(direction==1) xPosition += currentSpeed;
-
-        if(direction==2) yPosition -= currentSpeed;
-
-        if(direction==3) xPosition -= currentSpeed;
+    @Override
+    public boolean getIsLoadedOntoTransporter() {
+        return this.isLoadedOntoTransporter;
     }
-
-    /**
-     * Change the direction of the car
-     * by 90 degrees in the counterclockwise direction
-     */
-    public void turnLeft(){
-        direction = (direction+3) % 4;
+    @Override
+    public void setIsLoadedOntoTransporter(boolean isLoaded) {
+        this.isLoadedOntoTransporter = isLoaded;
     }
-    /**
-     * Change the direction of the car
-     * by 90 degrees in the clockwise direction
-     */
-    public void turnRight(){
-        direction = (direction+1) % 4;
-    }
-
-    /**
-     *  Increase the current speed of the car by an amount multiplied by a speedfactor.
-     *  The speed is the minimum of the current speed and the engine power
-     *
-     * @param amount - the amount to increase currentSpeed by
-     */
-    protected void incrementSpeed(double amount){
-        currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);
-    }
-
-    /**
-     *  Decrease the current speed of the car by an amount multiplied by a speedfactor.
-     *  The speed is the maximum of the current speed and zero
-     *
-     * @param amount - The amount to decrement currentSpeed by
-     */
-    protected void decrementSpeed(double amount){
-        currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount,0);
-    }
-
-    /**
-     * Increase the current speed by the provided amount
-     *
-     * @param amount double in the range [0,1]
-     */
-    public void gas(double amount) {
-        if (amount <= 1 && amount >= 0) {
-            incrementSpeed(amount);
+    @Override
+    public void move() {
+        if (!this.getIsLoadedOntoTransporter()) {
+            super.move();
         } else {
-            throw new IllegalArgumentException("Gas accepts values of amount between 0 and 1.");
+            throw new IllegalStateException("Cannot move car while loaded onto a transporter.");
         }
     }
 
-    /**
-     * Decrease the current speed by the provided amount
-     *
-     * @param amount double in the range [0,1]
-     */
-    public void brake(double amount){
-        if(amount <= 1 && amount >= 0) {
-            decrementSpeed(amount);
-        }else{
-            throw new IllegalArgumentException("Brake accepts values of amount between 0 and 1.");
+    @Override
+    public void turnLeft() {
+        if (!this.getIsLoadedOntoTransporter()) {
+            super.turnLeft();
+        } else {
+            throw new IllegalStateException("Cannot turn left while loaded onto a transporter.");
         }
     }
 
-    /**
-     * Calculate the specific speed factor of an instance.
-     *
-     * @return double
-     */
-    protected abstract double speedFactor();
-
-
+    @Override
+    public void turnRight() {
+        if (!this.getIsLoadedOntoTransporter()) {
+            super.turnRight();
+        } else {
+            throw new IllegalStateException("Cannot turn right while loaded onto a transporter.");
+        }
+    }
 }

@@ -11,10 +11,10 @@ public class Volvo240 extends SmallCar {
      * Instantiates a new Volvo 240.
      */
     public Volvo240() {
-        this.nrDoors = 4;
-        this.color = Color.black;
-        this.enginePower = 100;
-        this.modelName = "Volvo240";
+        this.setNrDoors(4);
+        this.setColor(Color.black);
+        this.setEnginePower(100);
+        this.setModelName("Volvo240");
         this.stopEngine();
     }
 
@@ -24,7 +24,7 @@ public class Volvo240 extends SmallCar {
      * @return double
      */
     protected double speedFactor(){
-        return enginePower * 0.01 * trimFactor;
+        return this.getEnginePower() * 0.01 * trimFactor;
     }
 
 }

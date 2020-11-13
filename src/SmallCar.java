@@ -13,7 +13,9 @@ public abstract class SmallCar extends Car {
         return this.LoadedOntoTransport;
     }
 
+    /*
     @Override
+
     public void move() {
         if (!this.LoadedOntoTransport) {
             super.move();
@@ -39,4 +41,6 @@ public abstract class SmallCar extends Car {
             throw new IllegalStateException("Cannot turn right while loaded.");
         }
     }
+
+     */
 }

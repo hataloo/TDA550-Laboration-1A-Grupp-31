@@ -4,7 +4,7 @@ import java.awt.*;
 /**
  * The type Car.
  */
-public abstract class Car implements Movable{
+public abstract class Car implements Movable, Transportable{
     /**
      * The number of doors.
      */
@@ -36,6 +36,8 @@ public abstract class Car implements Movable{
      * The direction the car is facing, starting with north = 0 then going clock-wise
      */
     protected int direction;
+
+    private boolean isLoadedOntoTransporter;
 
     // Constructors
     /**
@@ -92,6 +94,16 @@ public abstract class Car implements Movable{
         color = clr;
     }
 
+    @Override
+    public boolean getIsLoadedOntoTransporter() {
+        return this.isLoadedOntoTransporter;
+    }
+
+    @Override
+    public void setIsLoadedOntoTransporter(boolean isLoaded) {
+        this.isLoadedOntoTransporter = isLoaded;
+    }
+
     // Methods
     /**
      * Start engine.
@@ -111,29 +123,38 @@ public abstract class Car implements Movable{
      * Move the position of the car in the direction it is facing
      * with the current speed
      */
-    public void move(){
-        if(direction==0) yPosition += currentSpeed;
+    public void move() {
+        if (!this.isLoadedOntoTransporter) {
 
-        if(direction==1) xPosition += currentSpeed;
+            if (direction == 0) yPosition += currentSpeed;
 
-        if(direction==2) yPosition -= currentSpeed;
+            if (direction == 1) xPosition += currentSpeed;
 
-        if(direction==3) xPosition -= currentSpeed;
+            if (direction == 2) yPosition -= currentSpeed;
+
+            if (direction == 3) xPosition -= currentSpeed;
+        }else{
+            throw new IllegalStateException("Cannot move the car while its loaded onto a transporter");}
     }
 
     /**
      * Change the direction of the car
      * by 90 degrees in the counterclockwise direction
      */
-    public void turnLeft(){
-        direction = (direction+3) % 4;
+    public void turnLeft() {
+        if (!this.isLoadedOntoTransporter) {
+            this.direction = (this.direction+3) % 4;
+        } else {
+            throw new IllegalStateException("Cannot turn left while loaded.");
+        }
     }
-    /**
-     * Change the direction of the car
-     * by 90 degrees in the clockwise direction
-     */
-    public void turnRight(){
-        direction = (direction+1) % 4;
+
+    public void turnRight() {
+        if (!this.isLoadedOntoTransporter) {
+            this.direction = (this.direction+1) % 4;
+        } else {
+            throw new IllegalStateException("Cannot turn right while loaded.");
+        }
     }
 
     /**
@@ -181,13 +202,12 @@ public abstract class Car implements Movable{
             throw new IllegalArgumentException("Brake accepts values of amount between 0 and 1.");
         }
     }
-
+    //Abstract method(s)
     /**
      * Calculate the specific speed factor of an instance.
      *
      * @return double
      */
     protected abstract double speedFactor();
-
 
 }

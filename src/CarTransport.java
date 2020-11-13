@@ -4,7 +4,7 @@ import java.lang.Math;
 /**
  * The type Car transport.
  */
-public class CarTransport extends FlatbedCar{
+public class CarTransport extends FlatbedCar implements Transporter<SmallCar>{
     private static final int MAX_STORAGE_CAPACITY = 10;
     private LinkedList<SmallCar> storedCars;
 
@@ -17,39 +17,35 @@ public class CarTransport extends FlatbedCar{
     }
 
     /**
-     * Load car.
+     * Load SmallCar.
      *
      * @param carToLoad the car to load
      */
-    public void loadCar(SmallCar carToLoad) {
-        if (carOkToLoad(carToLoad)) {
+    public void loadTransportable(SmallCar carToLoad){
+        if (carOkToLoad(carToLoad)){
             carToLoad.xPosition = this.xPosition;
             carToLoad.yPosition = this.yPosition;
-            carToLoad.setLoadedOntoTransport(true);
             storedCars.push(carToLoad);
+            carToLoad.setLoadedOntoTransport(true);
         }
     }
 
     /**
-     * Unload car small car.
+     * Unload SmallCar.
      *
      * @return the small car
      */
-    public SmallCar unloadCar() {
-        if (!this.flatbedRaised && !storedCars.isEmpty()) {
+    public SmallCar unloadTransportable(){
+        if (!this.flatbedRaised && !storedCars.isEmpty()){
             SmallCar carToUnload = storedCars.pop();
             carToUnload.setLoadedOntoTransport(false);
-            carToUnload.xPosition = this.xPosition;
-            carToUnload.yPosition = this.yPosition;
-
             return carToUnload;
-        } else if (storedCars.isEmpty()) {
+        } else if(storedCars.isEmpty()){
             throw new IllegalStateException("There are no cars to unload.");
-        }else{
+        } else{
             throw new IllegalStateException("Cannot unload cars while flatbed is raised");
         }
     }
-
     /**
      * Checks that the car fullfills the requirements to be loaded.
      *
@@ -66,6 +62,8 @@ public class CarTransport extends FlatbedCar{
             throw new IllegalStateException("Cannot load while flatbed is raised");
         } else if (storedCars.size() >= MAX_STORAGE_CAPACITY) {
             throw new IllegalStateException("CarTransport already full");
+        } else if(car.getIsLoadedOntoTransporter()){
+            throw new IllegalStateException("Car is already loaded onto a Transporter");
         }
         return true;
     }

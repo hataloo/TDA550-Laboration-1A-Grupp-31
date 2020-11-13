@@ -5,9 +5,9 @@ import java.util.ArrayList;
  *
  * @param <T> the type parameter
  */
-public class CarWorkshop<T extends Car> {
-    private ArrayList<T> carsInWorkshop;
-    private int capacity;
+public class CarWorkshop<T extends Car> implements Transporter<T> {
+    private final ArrayList<T> carsInWorkshop;
+    private final int capacity;
 
     /**
      * Instantiates a new Car workshop.
@@ -36,41 +36,52 @@ public class CarWorkshop<T extends Car> {
         return this.capacity;
     }
 
-    /**
-     * Admit car.
-     *
-     * @param carToAdd the car to add
-     */
-    public void admitCar(T carToAdd){
-        this.carsInWorkshop.add(carToAdd);
+//    /**
+//     * Admit car.
+//     *
+//     * @param carToAdd the car to add
+//     */
+//    public void admitCar(T carToAdd){
+//        this.carsInWorkshop.add(carToAdd);
+//    }
+//
+//    /**
+//     * Return car from the workshop
+//     *
+//     * @param carToGet the car you want to return
+//     * @return the car
+//     */
+//    public T returnCar(T carToGet){
+//        int indexOfCar = this.carsInWorkshop.indexOf(carToGet);
+//        return this.carsInWorkshop.get(indexOfCar);
+//    }
+
+    @Override
+    public void loadTransportable(T toBeLoaded) {
+        this.carsInWorkshop.add(toBeLoaded);
     }
 
-    /**
-     * Return car from the workshop
-     *
-     * @param carToGet the car you want to return
-     * @return the car
-     */
-    public T returnCar(T carToGet){
-        int indexOfCar = this.carsInWorkshop.indexOf(carToGet);
+    @Override
+    public T unloadTransportable(T toBeUnloaded) {
+        int indexOfCar = this.carsInWorkshop.indexOf(toBeUnloaded);
         return this.carsInWorkshop.get(indexOfCar);
     }
 
-    /**
-     * Main.
-     *
-     * @param args the args
-     */
-    public void main(String[] args){
-        //Used to demonstrate static errors by changing the static types.
-        CarWorkshop<SmallCar> mySaabWorkshop = new CarWorkshop<>();
-        Saab95 myFavoriteCar = new Saab95();
-        Volvo240 mySecondFavoriteCar = new Volvo240();
-
-        mySaabWorkshop.admitCar(myFavoriteCar);
-        mySaabWorkshop.admitCar(mySecondFavoriteCar);
-
-        SmallCar myRepairedCar = mySaabWorkshop.returnCar(myFavoriteCar);
-
-    }
+//    /**
+//     * Main.
+//     *
+//     * @param args the args
+//     */
+//    public void main(String[] args){
+//        //Used to demonstrate static errors by changing the static types.
+//        CarWorkshop<SmallCar> mySaabWorkshop = new CarWorkshop<>();
+//        Saab95 myFavoriteCar = new Saab95();
+//        Volvo240 mySecondFavoriteCar = new Volvo240();
+//
+//        mySaabWorkshop.admitCar(myFavoriteCar);
+//        mySaabWorkshop.admitCar(mySecondFavoriteCar);
+//
+//        SmallCar myRepairedCar = mySaabWorkshop.returnCar(myFavoriteCar);
+//
+//    }
 }

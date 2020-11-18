@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
                         testVolvo240.class,
                         testScania.class,
                         testCarTransport.class,
-                        testCarWorkshop.class})
+                        testCarWorkshop.class,
+                        testCarFerry.class})
 public class testAll {
 }

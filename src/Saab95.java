@@ -3,7 +3,7 @@ import java.awt.*;
 /**
  * The type Saab 95. Extends the Car-class
  */
-public class Saab95 extends SmallCar{
+public class Saab95 extends Car{
 
     private boolean turboOn;
 
@@ -16,6 +16,7 @@ public class Saab95 extends SmallCar{
         this.setEnginePower(125);
         this.turboOn = false;
         this.setModelName("Saab95");
+        this.setMagnitude(10);
         stopEngine();
     }
 

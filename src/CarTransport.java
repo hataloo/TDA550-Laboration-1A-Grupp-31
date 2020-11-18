@@ -4,22 +4,22 @@ import java.lang.Math;
 /**
  * The type Car transport.
  */
-public class CarTransport extends FlatbedCar implements Transporter<SmallCar> {
+public class CarTransport extends FlatbedCar implements Transporter<Car> {
     private static final int MAX_STORAGE_CAPACITY = 10;
-    private static double threshold = 0.1;
-    private LinkedList<SmallCar> storedCars;
+    private static final double threshold = 0.1;
+    private final LinkedList<Car> storedCars;
 
 
     /**
      * Instantiates a new Car transport.
      */
     public CarTransport() {
-        this.storedCars = new LinkedList<SmallCar>();
+        this.storedCars = new LinkedList<Car>();
     }
 
 
     @Override
-    public void loadTransportable(SmallCar carToLoad) {
+    public void loadTransportable(Car carToLoad) {
         if (carOkToLoad(carToLoad)) {
             carToLoad.setXPosition(this.getXPosition());
             carToLoad.setYPosition(this.getYPosition());
@@ -29,13 +29,13 @@ public class CarTransport extends FlatbedCar implements Transporter<SmallCar> {
     }
 
     @Override
-    public SmallCar unloadTransportable() {
+    public Car unloadTransportable() {
         if (storedCars.isEmpty()) {
             throw new IllegalStateException("There are no cars to unload.");
         } else if (this.flatbedRaised) {
             throw new IllegalStateException("Cannot unload cars while flatbed is raised");
         } else {
-            SmallCar carToUnload = storedCars.pop();
+            Car carToUnload = storedCars.pop();
             carToUnload.setIsLoadedOntoTransporter(false);
             return carToUnload;
         }
@@ -47,7 +47,7 @@ public class CarTransport extends FlatbedCar implements Transporter<SmallCar> {
      * @param car - The car to be loaded
      * @return - boolean
      */
-    private boolean carOkToLoad(SmallCar car) {
+    private boolean carOkToLoad(Car car) {
         if (car.hashCode() == this.hashCode()) {
             throw new IllegalStateException("Cannot load self");
         } else if (Math.abs(car.getXPosition() - this.getXPosition()) >= threshold || Math.abs(car.getYPosition() - this.getYPosition()) >= threshold) {
@@ -58,6 +58,8 @@ public class CarTransport extends FlatbedCar implements Transporter<SmallCar> {
             throw new IllegalStateException("CarTransport already full");
         } else if (car.getIsLoadedOntoTransporter()) {
             throw new IllegalStateException("Car is already loaded onto another transporter");
+        } else if (this.getMagnitude() <= car.getMagnitude()) {
+            throw new IllegalStateException("Car is too big to loaded.");
         }
         return true;
     }
@@ -93,7 +95,7 @@ public class CarTransport extends FlatbedCar implements Transporter<SmallCar> {
 
         if(direction==3) this.setXPosition(xPosition - currentSpeed);
 
-        for (SmallCar car: storedCars) {
+        for (Car car: storedCars) {
             car.setXPosition(this.getXPosition());
             car.setYPosition(this.getYPosition());
         }

@@ -2,6 +2,7 @@ import java.awt.*;
 
 public abstract class Vehicle implements Movable {
 
+    private int magnitude;
     /**
      * The Engine power.
      */
@@ -29,6 +30,10 @@ public abstract class Vehicle implements Movable {
     }
     // ================== Methods ==================
 
+
+    public int getMagnitude() { return magnitude; }
+
+    public void setMagnitude(int magnitude) { this.magnitude = magnitude; }
 
     protected double getEnginePower() {
         return enginePower;

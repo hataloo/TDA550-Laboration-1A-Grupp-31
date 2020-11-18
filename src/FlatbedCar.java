@@ -13,6 +13,7 @@ public abstract class FlatbedCar extends Car{
      */
     public FlatbedCar(){
         this.flatbedRaised = false;
+        this.setMagnitude(20);
     }
 
     /**

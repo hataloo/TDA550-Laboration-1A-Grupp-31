@@ -3,7 +3,6 @@ import org.junit.Test;
 import javax.swing.text.StyleContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 
 public class testCarWorkshop {
 
@@ -33,7 +32,7 @@ public class testCarWorkshop {
 
     @Test
     public void testAdmitMultipleCarTypes() {
-        CarWorkshop<SmallCar> carWorkshop = new CarWorkshop<>();
+        CarWorkshop<Car> carWorkshop = new CarWorkshop<>();
         Saab95 saab95 = new Saab95();
         Volvo240 volvo240 = new Volvo240();
 

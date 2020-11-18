@@ -52,7 +52,7 @@ public class testCarTransport {
         carTransport.loadTransportable(car1);
         carTransport.loadTransportable(car2);
 
-        SmallCar car3 = carTransport.unloadTransportable();
+        Car car3 = carTransport.unloadTransportable();
 
         assertEquals(car2.hashCode(), car3.hashCode());
     }

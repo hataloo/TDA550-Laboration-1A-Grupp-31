@@ -3,7 +3,7 @@ import java.awt.*;
 /**
  * The type Volvo 240. Extends the Car-class.
  */
-public class Volvo240 extends SmallCar {
+public class Volvo240 extends Car {
 
     private final static double trimFactor = 1.2;
 
@@ -16,6 +16,7 @@ public class Volvo240 extends SmallCar {
         this.setEnginePower(100);
         this.setModelName("Volvo240");
         this.stopEngine();
+        this.setMagnitude(10);
     }
 
     /**

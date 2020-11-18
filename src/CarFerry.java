@@ -3,18 +3,20 @@ import java.util.*;
 
 public class CarFerry extends Vehicle implements Transporter<Car> {
 
-    private static double threshold = 0.5;
-    private ArrayList<Car> carsOnFerry;
-    private int capacity;
+    private final static double threshold = 0.5;
+    private final List<Car> carsOnFerry;
+    private final int capacity;
 
     public CarFerry() {
         this.capacity = 20;
         this.carsOnFerry = new ArrayList<Car>(this.capacity);
+        this.setMagnitude(30);
     }
 
     public CarFerry(int capacity) {
         this.capacity = capacity;
         this.carsOnFerry = new ArrayList<Car>(this.capacity);
+        this.setMagnitude(9);
     }
     public int getCapacity(){
         return this.capacity;
@@ -32,13 +34,14 @@ public class CarFerry extends Vehicle implements Transporter<Car> {
 
     @Override
     public void loadTransportable(Car toBeLoaded) {
-        if(carOkToLoad(toBeLoaded)) {
+        if (toBeLoaded.getIsLoadedOntoTransporter()) {
+            throw new IllegalStateException("Car is already loaded onto another transporter");
+        } else if (this.getMagnitude() <= toBeLoaded.getMagnitude()) {
+            throw new IllegalArgumentException("Car is too large for the ferry");
+        } else if (carOkToLoad(toBeLoaded)) {
             this.carsOnFerry.add(toBeLoaded);
             toBeLoaded.setIsLoadedOntoTransporter(true);
-        } else if (toBeLoaded.getIsLoadedOntoTransporter()) {
-            throw new IllegalStateException("Car is already loaded onto another transporter");
-        }
-        else{
+        } else{
             throw new IllegalStateException("Car is unable to load");
         }
     }
@@ -49,6 +52,7 @@ public class CarFerry extends Vehicle implements Transporter<Car> {
      */
     @Override
     public void move(){
+
         int direction = this.getDirection();
         double xPosition = this.getXPosition();
         double yPosition = this.getYPosition();
@@ -70,8 +74,10 @@ public class CarFerry extends Vehicle implements Transporter<Car> {
 
     private boolean carOkToLoad(Car car) {
         if (Math.abs(car.getXPosition() - this.getXPosition()) >= threshold || Math.abs(car.getYPosition()- this.getYPosition()) >= threshold) {
-            throw new IllegalArgumentException("Car to load must be closer to Ferry");}
-        else
+            throw new IllegalArgumentException("Car to load must be closer to Ferry");
+        } else if (this.getMagnitude() <= car.getMagnitude()) {
+            throw new IllegalStateException("Car is too big to loaded.");
+        } else
             return true;
         }
     }

@@ -7,18 +7,19 @@ import java.awt.*;
  */
 public class Scania extends FlatbedCar{
 
+    private static final double MAX_FLATBED_ANGLE = 70;
+    private static final double MIN_FLATBED_ANGLE = 0;
+
     /**
      * The angle of the flatbed
      */
-    private static final double MAX_FLATBED_ANGLE = 70;
-    private static final double MIN_FLATBED_ANGLE = 0;
     private double flatbedAngle;
 
     /**
      * Instantiates new Scania with default values.
      */
     public Scania(){
-        this.setNrDoors(3);
+        this.setNrDoors(2);
         this.setColor(Color.green);
         this.setEnginePower(90);
         this.setModelName("Scania");

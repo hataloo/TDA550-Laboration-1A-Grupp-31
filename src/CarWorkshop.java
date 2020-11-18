@@ -1,13 +1,14 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The type Car workshop.
  *
  * @param <T> the type parameter
  */
-public class CarWorkshop<T extends Car> implements Transporter<T>{
-    private final LinkedList<T> carsInWorkshop;
+public class CarWorkshop<T extends Car> implements Transporter<T> {
+    private final List<T> carsInWorkshop;
     private final int capacity;
 
     /**
@@ -43,7 +44,7 @@ public class CarWorkshop<T extends Car> implements Transporter<T>{
      * @param carToAdd the car to add
      */
     public void admitCar(T carToAdd){
-        this.carsInWorkshop.push(carToAdd);
+        this.loadTransportable(carToAdd);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class CarWorkshop<T extends Car> implements Transporter<T>{
         if(this.carsInWorkshop.isEmpty()){
             throw new IllegalStateException("The workshop is empty.");
         }
-        T unloadedCar = this.carsInWorkshop.removeLast();
+        T unloadedCar = this.carsInWorkshop.remove(0);
         unloadedCar.setIsLoadedOntoTransporter(false);
         return unloadedCar;
     }
@@ -87,14 +88,18 @@ public class CarWorkshop<T extends Car> implements Transporter<T>{
 //     */
 //    public void main(String[] args){
 //        //Used to demonstrate static errors.
-//        CarWorkshop<SmallCar> mySaabWorkshop = new CarWorkshop<>();
-//        Saab95 myFavoriteCar = new Saab95();
-//        Volvo240 mySecondFavoriteCar = new Volvo240();
+////        CarWorkshop<SmallCar> mySaabWorkshop = new CarWorkshop<>();
+////        Saab95 myFavoriteCar = new Saab95();
+////        Volvo240 mySecondFavoriteCar = new Volvo240();
+////
+////        mySaabWorkshop.admitCar(myFavoriteCar);
+////        mySaabWorkshop.admitCar(mySecondFavoriteCar);
 //
-//        mySaabWorkshop.admitCar(myFavoriteCar);
-//        mySaabWorkshop.admitCar(mySecondFavoriteCar);
+//        CarWorkshop<CarFerry> carWorkshop = new CarWorkshop<>();
+//        Saab95 saab95 = new Saab95();
 //
-//        SmallCar myRepairedCar = mySaabWorkshop.returnCar(myFavoriteCar);
+//        carWorkshop.loadTransportable(saab95);
+//        carWorkshop.loadTransportable("hej");
 //
 //    }
 }

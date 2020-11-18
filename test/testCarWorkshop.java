@@ -3,7 +3,6 @@ import org.junit.Test;
 import javax.swing.text.StyleContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 
 public class testCarWorkshop {
 
@@ -28,18 +27,18 @@ public class testCarWorkshop {
         Saab95 saab95theSecond = new Saab95();
         carWorkshop.admitCar(saab95);
         carWorkshop.admitCar(saab95theSecond);
-        assertEquals(carWorkshop.returnCar(saab95),saab95);
+        assertEquals(carWorkshop.unloadTransportable(),saab95);
     }
 
     @Test
     public void testAdmitMultipleCarTypes() {
-        CarWorkshop<SmallCar> carWorkshop = new CarWorkshop<>();
+        CarWorkshop<Car> carWorkshop = new CarWorkshop<>();
         Saab95 saab95 = new Saab95();
         Volvo240 volvo240 = new Volvo240();
 
         carWorkshop.admitCar(saab95);
         carWorkshop.admitCar(volvo240);
 
-        assertEquals(saab95, carWorkshop.returnCar(saab95));
+        assertEquals(saab95, carWorkshop.unloadTransportable());
     }
 }

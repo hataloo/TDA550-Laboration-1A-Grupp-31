@@ -1,7 +1,4 @@
-public interface Transporter<T>{
-
+public interface Transporter<T extends Transportable> {
     public void loadTransportable(T toBeLoaded);
-    public T unloadTransportable(T toBeUnloaded);
-
+    public T unloadTransportable();
 }
-

@@ -13,13 +13,14 @@ public abstract class FlatbedCar extends Car{
      */
     public FlatbedCar(){
         this.flatbedRaised = false;
+        this.setMagnitude(20);
     }
 
     /**
      * Raise flatbed.
      */
     public void raiseFlatbed(){
-        if(this.currentSpeed != 0){
+        if(this.getCurrentSpeed() != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
         }
         this.flatbedRaised = true;
@@ -29,7 +30,7 @@ public abstract class FlatbedCar extends Car{
      * Lower flatbed.
      */
     public void lowerFlatbed(){
-        if(this.currentSpeed != 0){
+        if(this.getCurrentSpeed() != 0){
             throw new IllegalStateException("The currentSpeed is non-zero, use stopEngine() first.");
         }
         this.flatbedRaised = false;

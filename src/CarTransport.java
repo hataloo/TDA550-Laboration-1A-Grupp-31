@@ -4,49 +4,40 @@ import java.lang.Math;
 /**
  * The type Car transport.
  */
-public class CarTransport extends FlatbedCar{
+public class CarTransport extends FlatbedCar implements Transporter<Car> {
     private static final int MAX_STORAGE_CAPACITY = 10;
-    private LinkedList<SmallCar> storedCars;
+    private static final double threshold = 0.1;
+    private final LinkedList<Car> storedCars;
 
-    // Implementera transportable.
+
     /**
      * Instantiates a new Car transport.
      */
     public CarTransport() {
-        this.storedCars = new LinkedList<SmallCar>();
+        this.storedCars = new LinkedList<Car>();
     }
 
-    /**
-     * Load car.
-     *
-     * @param carToLoad the car to load
-     */
-    public void loadCar(SmallCar carToLoad) {
+
+    @Override
+    public void loadTransportable(Car carToLoad) {
         if (carOkToLoad(carToLoad)) {
-            carToLoad.xPosition = this.xPosition;
-            carToLoad.yPosition = this.yPosition;
-            carToLoad.setLoadedOntoTransport(true);
+            carToLoad.setXPosition(this.getXPosition());
+            carToLoad.setYPosition(this.getYPosition());
+            carToLoad.setIsLoadedOntoTransporter(true);
             storedCars.push(carToLoad);
         }
     }
 
-    /**
-     * Unload car small car.
-     *
-     * @return the small car
-     */
-    public SmallCar unloadCar() {
-        if (!this.flatbedRaised && !storedCars.isEmpty()) {
-            SmallCar carToUnload = storedCars.pop();
-            carToUnload.setLoadedOntoTransport(false);
-            carToUnload.xPosition = this.xPosition;
-            carToUnload.yPosition = this.yPosition;
-
-            return carToUnload;
-        } else if (storedCars.isEmpty()) {
+    @Override
+    public Car unloadTransportable() {
+        if (storedCars.isEmpty()) {
             throw new IllegalStateException("There are no cars to unload.");
-        }else{
+        } else if (this.flatbedRaised) {
             throw new IllegalStateException("Cannot unload cars while flatbed is raised");
+        } else {
+            Car carToUnload = storedCars.pop();
+            carToUnload.setIsLoadedOntoTransporter(false);
+            return carToUnload;
         }
     }
 
@@ -56,16 +47,19 @@ public class CarTransport extends FlatbedCar{
      * @param car - The car to be loaded
      * @return - boolean
      */
-    private boolean carOkToLoad(SmallCar car) {
-        double threshold = 0.1;
+    private boolean carOkToLoad(Car car) {
         if (car.hashCode() == this.hashCode()) {
             throw new IllegalStateException("Cannot load self");
-        } else if (Math.abs(car.xPosition - this.xPosition) >= threshold || Math.abs(car.yPosition - this.yPosition) >= threshold) {
+        } else if (Math.abs(car.getXPosition() - this.getXPosition()) >= threshold || Math.abs(car.getYPosition() - this.getYPosition()) >= threshold) {
             throw new IllegalArgumentException("Car to load must be closer to CarTransport");
         } else if (this.flatbedRaised) {
             throw new IllegalStateException("Cannot load while flatbed is raised");
         } else if (storedCars.size() >= MAX_STORAGE_CAPACITY) {
             throw new IllegalStateException("CarTransport already full");
+        } else if (car.getIsLoadedOntoTransporter()) {
+            throw new IllegalStateException("Car is already loaded onto another transporter");
+        } else if (this.getMagnitude() <= car.getMagnitude()) {
+            throw new IllegalStateException("Car is too big to loaded.");
         }
         return true;
     }
@@ -83,32 +77,27 @@ public class CarTransport extends FlatbedCar{
     }
 
     /**
-     * Compute the speedfactor.
-     *
-     * @return double
-     */
-    @Override
-    protected double speedFactor(){
-        return enginePower * 0.01;
-    }
-
-    /**
      * Move the position of the car in the direction it is facing
      * with the current speed
      */
     @Override
     public void move(){
-        if(direction==0) yPosition += currentSpeed;
+        int direction = this.getDirection();
+        double xPosition = this.getXPosition();
+        double yPosition = this.getYPosition();
+        double currentSpeed = this.getCurrentSpeed();
 
-        if(direction==1) xPosition += currentSpeed;
+        if(direction==0) this.setYPosition(yPosition + currentSpeed);
 
-        if(direction==2) yPosition -= currentSpeed;
+        if(direction==1) this.setXPosition(xPosition + currentSpeed);
 
-        if(direction==3) xPosition -= currentSpeed;
+        if(direction==2) this.setYPosition(yPosition - currentSpeed);
 
-        for (SmallCar car: storedCars) {
-            car.xPosition = this.xPosition;
-            car.yPosition = this.yPosition;
+        if(direction==3) this.setXPosition(xPosition - currentSpeed);
+
+        for (Car car: storedCars) {
+            car.setXPosition(this.getXPosition());
+            car.setYPosition(this.getYPosition());
         }
     }
 

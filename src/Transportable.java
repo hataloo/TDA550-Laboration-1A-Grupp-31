@@ -1,3 +1,4 @@
 public interface Transportable {
-    public boolean isLoadedOntoTransporter();
+    boolean getIsLoadedOntoTransporter();
+    void setIsLoadedOntoTransporter(boolean isLoaded);
 }

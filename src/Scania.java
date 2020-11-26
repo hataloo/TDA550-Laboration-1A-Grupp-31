@@ -25,7 +25,11 @@ public class Scania extends FlatbedCar{
         this.setModelName("Scania");
         this.flatbedAngle=0;
     }
-
+    public Scania(int x, int y){
+        this();
+        this.setXPosition(x);
+        this.setYPosition(y);
+    }
     /**
      * Returns true if flatbedAngle is 0.
      * @return boolean

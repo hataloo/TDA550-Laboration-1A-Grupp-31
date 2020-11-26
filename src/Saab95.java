@@ -19,7 +19,11 @@ public class Saab95 extends Car{
         this.setMagnitude(10);
         stopEngine();
     }
-
+    public Saab95(int x, int y) {
+        this();
+        this.setXPosition(x);
+        this.setYPosition(y);
+    }
     /**
      * Set turbo on.
      */

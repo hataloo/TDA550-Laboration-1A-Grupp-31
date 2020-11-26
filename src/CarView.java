@@ -16,17 +16,17 @@ import java.awt.event.ActionListener;
 public class CarView extends JFrame{
     private static final int X = 800;
     private static final int Y = 800;
-
+    private static final int controlPanelSize = 240;
     // The controller member
     CarController carC;
 
-    DrawPanel drawPanel = new DrawPanel(X, Y-240);
+    DrawPanel drawPanel;
 
     JPanel controlPanel = new JPanel();
 
     JPanel gasPanel = new JPanel();
     JSpinner gasSpinner = new JSpinner();
-    int gasAmount = 0;
+    int gasAmount = 100;
     JLabel gasLabel = new JLabel("Amount of gas");
 
     JButton gasButton = new JButton("Gas");
@@ -42,6 +42,7 @@ public class CarView extends JFrame{
     // Constructor
     public CarView(String framename, CarController cc){
         this.carC = cc;
+        this.drawPanel = new DrawPanel(cc.vehicles,X, Y-controlPanelSize);
         initComponents(framename);
     }
 
@@ -58,8 +59,8 @@ public class CarView extends JFrame{
 
 
         SpinnerModel spinnerModel =
-                new SpinnerNumberModel(0, //initial value
-                        0, //min
+                new SpinnerNumberModel(100, //initial value
+                        100, //min
                         100, //max
                         1);//step
         gasSpinner = new JSpinner(spinnerModel);
@@ -107,7 +108,14 @@ public class CarView extends JFrame{
                 carC.gas(gasAmount);
             }
         });
-
+        brakeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { carC.brake(gasAmount);}
+        });
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { carC.stopEngine();}
+        });
         // Make the frame pack all it's components by respecting the sizes if possible.
         this.pack();
 
@@ -120,4 +128,9 @@ public class CarView extends JFrame{
         // Make sure the frame exits when "x" is pressed
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+    @Override
+    public int getX(){return X;}
+    @Override
+    public int getY(){return Y-controlPanelSize;}
+    public static int getControlPanelSize(){return controlPanelSize;}
 }

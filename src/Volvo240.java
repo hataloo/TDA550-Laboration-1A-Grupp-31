@@ -18,7 +18,11 @@ public class Volvo240 extends Car {
         this.stopEngine();
         this.setMagnitude(10);
     }
-
+    public Volvo240(int x, int y){
+        this();
+        this.setXPosition(x);
+        this.setYPosition(y);
+    }
     /**
      * Calculate the speed factor
      *

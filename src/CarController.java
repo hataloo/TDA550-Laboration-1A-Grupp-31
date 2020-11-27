@@ -1,3 +1,5 @@
+import jdk.nashorn.internal.ir.Flags;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +31,6 @@ public class CarController {
     public static void main(String[] args) {
         // Instance of this class
         CarController cc = new CarController();
-
         cc.vehicles.add(new Volvo240(0,0));
         cc.vehicles.add(new Saab95(100,0));
         cc.vehicles.add(new Scania(200,0));
@@ -59,21 +60,24 @@ public class CarController {
                 frame.drawPanel.repaint();
             }
         }
+
         private boolean vehicleInsidePanel(Vehicle vehicle,int x,int y){
             int frameX = frame.getX() - frame.drawPanel.getImageWidth(vehicle);
-            int frameY = frame.getY()-frame.drawPanel.getImageHeight(vehicle);
+            int frameY = frame.getY() - frame.drawPanel.getImageHeight(vehicle);
 
             return x >= 0 && x <= frameX && y >= 0 && y <= frameY;
         }
-
     }
 
     // Calls the gas method for each car once
     void gas(int amount) {
         double gas = ((double) amount) / 100;
-        for (Vehicle vehicle : vehicles
-                ) {
-            vehicle.gas(gas);
+        for (Vehicle vehicle : vehicles) {
+            try {
+                vehicle.gas(gas);
+            }catch(IllegalStateException e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -83,10 +87,53 @@ public class CarController {
             vehicle.brake(brake);
         }
     }
+    void startEngine(){
+        for (Vehicle vehicle: vehicles){
+            try {
+                vehicle.startEngine();
+            }catch(IllegalStateException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 
     void stopEngine() {
         for (Vehicle vehicle: vehicles) {
             vehicle.stopEngine();
+        }
+    }
+
+    void turboOn() {
+        for (Vehicle vehicle: vehicles) {
+            if(vehicle instanceof Saab95){
+                ((Saab95) vehicle).setTurboOn();
+            }
+        }
+    }
+
+    void turboOff() {
+        for (Vehicle vehicle: vehicles) {
+            if(vehicle instanceof Saab95){
+                ((Saab95) vehicle).setTurboOff();
+            }
+        }
+    }
+
+    void raiseFlatbed() {
+        for (Vehicle vehicle: vehicles) {
+            if (vehicle instanceof FlatbedCar) {
+                if(vehicle.getCurrentSpeed() == 0) {
+                    ((FlatbedCar) vehicle).raiseFlatbed();
+                } else{ System.out.println("Stop " + vehicle.getClass().getName()+ " before raising the Flatbed");}
+            }
+        }
+    }
+
+    void lowerFlatbed() {
+        for (Vehicle vehicle: vehicles) {
+            if (vehicle instanceof FlatbedCar) {
+                ((FlatbedCar) vehicle).lowerFlatbed();
+            }
         }
     }
 }

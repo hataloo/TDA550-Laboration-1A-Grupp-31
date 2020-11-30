@@ -35,7 +35,7 @@ public class CarView extends JFrame{
     JButton liftBedButton = new JButton("Scania raise flatbed");
     JButton lowerBedButton = new JButton("Scania Lower flatbed");
 
-    private JButton startButton = new JButton("Start all cars");
+    JButton startButton = new JButton("Start all cars");
     JButton stopButton = new JButton("Stop all cars");
 
     // Constructor

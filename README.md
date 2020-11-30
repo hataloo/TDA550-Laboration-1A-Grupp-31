@@ -1,3 +1,4 @@
 # TDA550-Laboration-1A-Grupp-31
 
-UML-diagram och svar på frågorna finns här: https://miro.com/app/board/o9J_lfOMkGU=/
+Miro board med UML-diagram och svar på frågorna: https://miro.com/app/board/o9J_lfOMkGU=/
+Boarden innehåller lite andra anteckningar med det vi vill att ni kollar på ligger under den stora rubriken LAB 2A.

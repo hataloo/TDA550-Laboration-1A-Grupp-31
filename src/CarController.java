@@ -2,6 +2,7 @@ import jdk.nashorn.internal.ir.Flags;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -18,67 +19,24 @@ import java.util.List;
 
 public class CarController {
     // member fields:
+    private final List<VehicleImage> vehicles;
+    private final CanMoveImages canMoveImages;
+    private final int xBoundary, yBoundary;
 
-    // The delay (ms) corresponds to 20 updates a sec (hz)
-    private final int delay = 50;
-    // The timer is started with an listener (see below) that executes the statements
-    // each step between delays.
-    private Timer timer = new Timer(delay, new TimerListener());
 
-    // The frame that represents this instance View of the MVC pattern
-    CarView frame;
-    // A list of cars, modify if needed
-    List<Vehicle> vehicles = new ArrayList<>();
-
-    //methods:
-
-    public static void main(String[] args) {
-        // Instance of this class
-        CarController cc = new CarController();
-        cc.vehicles.add(new Volvo240(0,0));
-        cc.vehicles.add(new Saab95(100,0));
-        cc.vehicles.add(new Scania(200,0));
-        // Start a new view and send a reference of self
-        cc.frame = new CarView("CarSim 1.0", cc);
-
-        // Start the timer
-        cc.timer.start();
-    }
-
-    /* Each step the TimerListener moves all the cars in the list and tells the
-    * view to update its images. Change this method to your needs.
-    * */
-    private class TimerListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            for (Vehicle vehicle : vehicles) {
-
-                vehicle.move();
-                int x = (int) Math.round(vehicle.getXPosition());
-                int y = (int) Math.round(vehicle.getYPosition());
-                if (!vehicleInsidePanel(vehicle,x,y)) {
-                    vehicle.turnRight();
-                    vehicle.turnRight();
-                }
-                frame.drawPanel.moveit(vehicle, x, y);
-                // repaint() calls the paintComponent method of the panel
-                frame.drawPanel.repaint();
-            }
-        }
-
-        private boolean vehicleInsidePanel(Vehicle vehicle,int x,int y){
-            int frameX = frame.getX() - frame.drawPanel.getImageWidth(vehicle);
-            int frameY = frame.getY() - frame.drawPanel.getImageHeight(vehicle);
-
-            return x >= 0 && x <= frameX && y >= 0 && y <= frameY;
-        }
+    CarController(CanMoveImages canMoveImages, int xBoundary,int yBoundary) {
+        this.canMoveImages = canMoveImages;
+        this.vehicles = new ArrayList<>();
+        this.xBoundary = xBoundary;
+        this.yBoundary = yBoundary;
     }
 
     // Calls the gas method for each car once
     void gas(int amount) {
         double gas = ((double) amount) / 100;
-        for (Vehicle vehicle : vehicles) {
+        for (VehicleImage vehicle : vehicles) {
             try {
-                vehicle.gas(gas);
+                vehicle.getVehicle().gas(gas);
             }catch(IllegalStateException e){
                 System.out.println(e.getMessage());
             }
@@ -87,15 +45,15 @@ public class CarController {
 
     void brake(int amount) {
         double brake = ((double) amount) / 100;
-        for (Vehicle vehicle : vehicles) {
-            vehicle.brake(brake);
+        for (VehicleImage vehicle : vehicles) {
+            vehicle.getVehicle().brake(brake);
         }
     }
 
     void startEngine(){
-        for (Vehicle vehicle: vehicles){
+        for (VehicleImage vehicle: vehicles){
             try {
-                vehicle.startEngine();
+                vehicle.getVehicle().startEngine();
             }catch(IllegalStateException e){
                 System.out.println(e.getMessage());
             }
@@ -103,42 +61,73 @@ public class CarController {
     }
 
     void stopEngine() {
-        for (Vehicle vehicle: vehicles) {
-            vehicle.stopEngine();
+        for (VehicleImage vehicle: vehicles) {
+            vehicle.getVehicle().stopEngine();
         }
     }
 
     void turboOn() {
-        for (Vehicle vehicle: vehicles) {
-            if(vehicle instanceof Saab95){
-                ((Saab95) vehicle).setTurboOn();
+        for (VehicleImage vehicle: vehicles) {
+            if(vehicle.getVehicle() instanceof Saab95){
+                ((Saab95) vehicle.getVehicle()).setTurboOn();
             }
         }
     }
 
     void turboOff() {
-        for (Vehicle vehicle: vehicles) {
-            if(vehicle instanceof Saab95){
-                ((Saab95) vehicle).setTurboOff();
+        for (VehicleImage vehicle: vehicles) {
+            if(vehicle.getVehicle() instanceof Saab95){
+                ((Saab95) vehicle.getVehicle()).setTurboOff();
             }
         }
     }
 
     void raiseFlatbed() {
-        for (Vehicle vehicle: vehicles) {
-            if (vehicle instanceof FlatbedCar) {
-                if(vehicle.getCurrentSpeed() == 0) {
-                    ((FlatbedCar) vehicle).raiseFlatbed();
+        for (VehicleImage vehicle: vehicles) {
+            if (vehicle.getVehicle() instanceof FlatbedCar) {
+                if(vehicle.getVehicle().getCurrentSpeed() == 0) {
+                    ((FlatbedCar) vehicle.getVehicle()).raiseFlatbed();
                 } else{ System.out.println("Stop " + vehicle.getClass().getName()+ " before raising the Flatbed");}
             }
         }
     }
 
     void lowerFlatbed() {
-        for (Vehicle vehicle: vehicles) {
-            if (vehicle instanceof FlatbedCar) {
-                ((FlatbedCar) vehicle).lowerFlatbed();
+        for (VehicleImage vehicle: vehicles) {
+            if (vehicle.getVehicle() instanceof FlatbedCar) {
+                ((FlatbedCar) vehicle.getVehicle()).lowerFlatbed();
             }
+        }
+    }
+    public void add(Vehicle vehicle){
+        VehicleImage vehicleImage = new VehicleImage(vehicle);
+        this.vehicles.add(vehicleImage);
+        Point point = convertCoordinatesToPoint(vehicle);
+        this.canMoveImages.loadImage(vehicleImage.hashCode(),vehicleImage.getImage(), point);
+    }
+
+    private Point convertCoordinatesToPoint(Vehicle vehicle){
+        int x = (int) Math.round(vehicle.getXPosition());
+        int y = (int) Math.round(vehicle.getYPosition());
+        return new Point(x,y);
+    }
+
+    private boolean vehicleInsideBoundary(VehicleImage vehicle){
+        int xTrueBoundary = xBoundary - vehicle.getImage().getWidth();
+        int yTrueBoundary = yBoundary - vehicle.getImage().getHeight();
+        Point point = convertCoordinatesToPoint(vehicle.getVehicle());
+        return point.x >= 0 && point.x <= xTrueBoundary && point.y >= 0 && point.y <= yTrueBoundary;
+    }
+
+    public void update(){
+        for (VehicleImage vehicle : vehicles){
+            vehicle.getVehicle().move();
+
+            if(!vehicleInsideBoundary(vehicle)){
+                vehicle.getVehicle().turnRight();
+                vehicle.getVehicle().turnRight();
+            }
+            canMoveImages.moveImageLocation(vehicle.hashCode(), convertCoordinatesToPoint(vehicle.getVehicle()));
         }
     }
 

@@ -75,4 +75,30 @@ public class DrawPanel extends JPanel{
     public int getImageWidth(Vehicle vehicle) {
         return images.get(vehicle).getWidth();
     }
+
+    private class ImageLocation{
+        private BufferedImage image;
+        private Point location;
+
+        ImageLocation(BufferedImage image, Point location){
+            this.image = image;
+            this.location = location;
+        }
+
+        public void setImage(BufferedImage image) {
+            this.image = image;
+        }
+
+        public void setLocation(Point location) {
+            this.location = location;
+        }
+
+        public BufferedImage getImage() {
+            return image;
+        }
+
+        public Point getLocation() {
+            return location;
+        }
+    }
 }

@@ -1,8 +1,12 @@
 import jdk.nashorn.internal.ir.Flags;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,6 +139,45 @@ public class CarController {
             if (vehicle instanceof FlatbedCar) {
                 ((FlatbedCar) vehicle).lowerFlatbed();
             }
+        }
+    }
+
+    private class VehicleImage {
+        Vehicle vehicle;
+        BufferedImage image;
+
+        VehicleImage(Vehicle vehicle) {
+            this.vehicle = vehicle;
+            loadImageFromDrive(vehicle);
+        }
+
+        private void loadImageFromDrive(Vehicle vehicle){
+            String filepath = "pics/" + vehicle.getClass().getName() + ".jpg";
+            BufferedImage loadedImage = new BufferedImage(0,0,0);
+            try {
+                 loadedImage = ImageIO.read(DrawPanel.class.getResourceAsStream(filepath));
+                 this.image = loadedImage;
+                 return;
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+            System.out.println("Error: Could not load vehicle image from " + filepath);
+        }
+
+        public Vehicle getVehicle() {
+            return vehicle;
+        }
+
+        public void setVehicle(Vehicle vehicle) {
+            this.vehicle = vehicle;
+        }
+
+        public BufferedImage getImage() {
+            return image;
+        }
+
+        public void setImage(BufferedImage image) {
+            this.image = image;
         }
     }
 }

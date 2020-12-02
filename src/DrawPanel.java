@@ -44,11 +44,13 @@ public class DrawPanel extends JPanel implements CanMoveImages{
     @Override
     public void moveImageLocation(int hashcode, Point point) {
         this.images.get(hashcode).setLocation(point);
+        this.repaint();
     }
 
     @Override
     public void loadImage(int hashcode, BufferedImage image, Point point) {
         this.images.put(hashcode, new ImageLocation(image, point));
+        this.repaint();
     }
 
     private class ImageLocation{

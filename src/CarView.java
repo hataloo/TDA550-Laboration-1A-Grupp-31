@@ -193,6 +193,7 @@ public class CarView extends JFrame{
 
     public static int getFrameHeight(){return Y-controlPanelSize;}
 
+
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             carC.update();

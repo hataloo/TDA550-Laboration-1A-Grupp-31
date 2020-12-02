@@ -142,7 +142,7 @@ public class CarController {
 
         private void loadImageFromDrive(Vehicle vehicle){
             String filepath = "pics/" + vehicle.getClass().getName() + ".jpg";
-            BufferedImage loadedImage = new BufferedImage(0,0,0);
+            BufferedImage loadedImage = new BufferedImage(100,100,1);
             try {
                  loadedImage = ImageIO.read(DrawPanel.class.getResourceAsStream(filepath));
                  this.image = loadedImage;

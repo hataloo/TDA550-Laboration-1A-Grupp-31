@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args) {
         // Instance of this class
-        int xBoundary = CarView.getFrameHeight();
+        int xBoundary = CarView.getFrameWidth();
         int yBoundary = CarView.getFrameHeight();
 
         DrawPanel drawPanel = new DrawPanel(xBoundary, yBoundary);

@@ -178,8 +178,23 @@ public class CarView extends JFrame{
             }
         });
     }
+
     @Override
     public int getX(){return X;}
+
     @Override
     public int getY(){return Y-controlPanelSize;}
+
+    private class TimerListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            carC.update();
+        }
+
+//        private boolean vehicleInsidePanel(Vehicle vehicle,int x,int y){
+//            int frameX = frame.getX() - frame.drawPanel.getImageWidth(vehicle);
+//            int frameY = frame.getY() - frame.drawPanel.getImageHeight(vehicle);
+//
+//            return x >= 0 && x <= frameX && y >= 0 && y <= frameY;
+//        }
+    }
 }

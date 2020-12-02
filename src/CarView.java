@@ -18,32 +18,36 @@ public class CarView extends JFrame{
     private static final int Y = 800;
     private static final int controlPanelSize = 240;
     // The controller member
-    CarController carC;
+    private final CarController carC;
+    private final Timer timer;
+    private final int delay;
 
-    DrawPanel drawPanel;
+    private final DrawPanel drawPanel;
 
-    JPanel controlPanel = new JPanel();
-    JPanel gasPanel = new JPanel();
-    JSpinner gasSpinner = new JSpinner();
-    int gasAmount = 100;
-    JLabel gasLabel = new JLabel("Amount of gas");
+    private final JPanel controlPanel = new JPanel();
+    private final JPanel gasPanel = new JPanel();
+    private JSpinner gasSpinner = new JSpinner();
+    private int gasAmount = 100;
+    private final JLabel gasLabel = new JLabel("Amount of gas");
 
-    JButton gasButton = new JButton("Gas");
-    JButton brakeButton = new JButton("Brake");
-    JButton turboOnButton = new JButton("Saab Turbo on");
-    JButton turboOffButton = new JButton("Saab Turbo off");
-    JButton liftBedButton = new JButton("Scania raise flatbed");
-    JButton lowerBedButton = new JButton("Scania Lower flatbed");
+    private final JButton gasButton = new JButton("Gas");
+    private final JButton brakeButton = new JButton("Brake");
+    private final JButton turboOnButton = new JButton("Saab Turbo on");
+    private final JButton turboOffButton = new JButton("Saab Turbo off");
+    private final JButton liftBedButton = new JButton("Scania raise flatbed");
+    private final JButton lowerBedButton = new JButton("Scania Lower flatbed");
 
-    JButton startButton = new JButton("Start all cars");
-    JButton stopButton = new JButton("Stop all cars");
+    private final JButton startButton = new JButton("Start all cars");
+    private final JButton stopButton = new JButton("Stop all cars");
 
     // Constructor
-    public CarView(String framename, CarController cc){
+    public CarView(String framename, CarController cc, DrawPanel drawPanel, int delay){
         super();
         this.carC = cc;
-        this.drawPanel = new DrawPanel(cc.vehicles,X, Y-controlPanelSize);
+        this.drawPanel = drawPanel;
         initComponents(framename);
+        this.delay = delay;
+        this.timer = new Timer(this.delay, new TimerListener());
     }
 
     // Sets everything in place and fits everything
@@ -179,22 +183,19 @@ public class CarView extends JFrame{
         });
     }
 
-    @Override
-    public int getX(){return X;}
+    void startTimer() {
+        this.timer.start();
+    }
 
-    @Override
-    public int getY(){return Y-controlPanelSize;}
+
+    public static int getFrameWidth(){return X;}
+
+
+    public static int getFrameHeight(){return Y-controlPanelSize;}
 
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             carC.update();
         }
-
-//        private boolean vehicleInsidePanel(Vehicle vehicle,int x,int y){
-//            int frameX = frame.getX() - frame.drawPanel.getImageWidth(vehicle);
-//            int frameY = frame.getY() - frame.drawPanel.getImageHeight(vehicle);
-//
-//            return x >= 0 && x <= frameX && y >= 0 && y <= frameY;
-//        }
     }
 }

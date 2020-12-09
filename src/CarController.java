@@ -131,7 +131,9 @@ public class CarController {
         }
     }
 
+    /*
     private class VehicleImage {
+
         Vehicle vehicle;
         BufferedImage image;
 
@@ -139,6 +141,8 @@ public class CarController {
             this.vehicle = vehicle;
             loadImageFromDrive(vehicle);
         }
+
+
 
         private void loadImageFromDrive(Vehicle vehicle){
             String filepath = "pics/" + vehicle.getClass().getName() + ".jpg";
@@ -169,4 +173,6 @@ public class CarController {
             this.image = image;
         }
     }
+
+     */
 }

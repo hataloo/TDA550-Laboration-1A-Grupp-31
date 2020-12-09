@@ -1,21 +1,21 @@
 import java.util.List;
 
-public class CarObserverComposite<T> {
-
-
+public class CarObserverComposite implements CarObserver{
     private List<CarObserver> carObservers;
 
 
-    public void addCarObserver(CarObserver c){
+    public void add(CarObserver c){
         carObservers.add(c);
     }
 
-    public void actOnVehicleMovement(List<VehicleImage> vehicleImages){
-        //TODO
-        /*
-            Implementera nya koden tillsammans!
-         */
+    public void remove(CarObserver c) {
+        carObservers.remove(c);
     }
 
+    public void actOnVehicleMovement(List<VehicleImage> vehicleImages){
+        for (CarObserver carObserver : carObservers) {
+            carObserver.actOnVehicleMovement(vehicleImages);
+        }
+    }
 
 }

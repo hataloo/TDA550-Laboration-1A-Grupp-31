@@ -1,5 +1,7 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class VehicleImage {
@@ -15,7 +17,7 @@ public class VehicleImage {
         String filepath = "pics/" + vehicle.getClass().getName() + ".jpg";
         BufferedImage loadedImage = new BufferedImage(100,100,1);
         try {
-            loadedImage = ImageIO.read(DrawPanel.class.getResourceAsStream(filepath));
+            loadedImage = ImageIO.read(VehicleImage.class.getResourceAsStream(filepath));
             this.image = loadedImage;
             return;
         } catch (IOException e){

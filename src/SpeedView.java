@@ -11,13 +11,16 @@ public class SpeedView extends JPanel implements CarObserver{
     public SpeedView(JFrame frame){
         this.frame = frame;
         initTextArea();
-        frame.add(this, BorderLayout.EAST);
+        this.setPreferredSize(textArea.getSize());
+        frame.add(this);
     }
+
     private void initTextArea(){
-        this.textArea = new JTextArea(3,20);
+        this.textArea = new JTextArea(3,10);
         this.textArea.setEditable(false);
         this.add(textArea);
     }
+
     @Override
     public void actOnVehicleMovement(List<VehicleImage> vehicles){
         textArea.setText("");
@@ -31,10 +34,11 @@ public class SpeedView extends JPanel implements CarObserver{
                 textArea.setColumns(maxLength);
             }
         }
+        this.setPreferredSize(textArea.getSize());
         this.frame.repaint();
     }
     private String getVehicleString(Vehicle vehicle){
         String[] className = vehicle.getClass().getName().split("\\.");
-        return className[className.length-1] + ": " +( (int) vehicle.getCurrentSpeed() ) + "km/h";
+        return className[className.length-1] + ": " +( (int) vehicle.getCurrentSpeed() ) + " km/h";
     }
 }

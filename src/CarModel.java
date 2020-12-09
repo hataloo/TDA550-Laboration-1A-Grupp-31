@@ -94,7 +94,13 @@ public class CarModel {
     public void add(Vehicle vehicle){
         VehicleImage vehicleImage = new VehicleImage(vehicle);
         this.vehicles.add(vehicleImage);
-        this.carObservers.actOnVehicleMovement(this.vehicles);
+        this.carObservers.actOnVehicleMovement(new ArrayList<>(this.vehicles));
+    }
+
+    public VehicleImage removeLast() {
+        VehicleImage removed =  this.vehicles.remove(vehicles.size()-1);
+        this.carObservers.actOnVehicleMovement(vehicles);
+        return removed;
     }
 
     private Point convertCoordinatesToPoint(Vehicle vehicle){
@@ -123,5 +129,8 @@ public class CarModel {
 
     public void addCarObserver(CarObserver carObserver) {
         this.carObservers.add(carObserver);
+    }
+    public int getNumberOfCars(){
+        return vehicles.size();
     }
 }

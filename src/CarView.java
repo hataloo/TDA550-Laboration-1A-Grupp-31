@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CarView extends JPanel implements CarObserver{
@@ -20,6 +21,7 @@ public class CarView extends JPanel implements CarObserver{
         this.setPreferredSize(new Dimension(x,y));
         this.setBackground(Color.green);
         this.frame.add(this);
+        this.vehicles = new ArrayList<>();
     }
 
     @Override

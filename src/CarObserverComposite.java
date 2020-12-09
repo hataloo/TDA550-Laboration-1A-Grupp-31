@@ -1,7 +1,12 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class CarObserverComposite implements CarObserver{
     private List<CarObserver> carObservers;
+
+    public CarObserverComposite() {
+        this.carObservers = new ArrayList<>();
+    }
 
 
     public void add(CarObserver c){

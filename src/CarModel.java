@@ -12,12 +12,10 @@ public class CarModel {
     // member fields:
     private final List<VehicleImage> vehicles;
     private final CarObserverComposite carObservers;
-    private final CanMoveImages canMoveImages;
     private final int xBoundary, yBoundary;
 
 
-    public CarModel(CanMoveImages canMoveImages, int xBoundary,int yBoundary) {
-        this.canMoveImages = canMoveImages;
+    public CarModel( int xBoundary,int yBoundary) {
         this.vehicles = new ArrayList<>();
         this.carObservers = new CarObserverComposite();
         this.xBoundary = xBoundary;

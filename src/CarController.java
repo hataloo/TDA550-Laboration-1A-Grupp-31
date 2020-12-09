@@ -43,8 +43,8 @@ public class CarController  {
     private final JButton startButton = new JButton("Start all cars");
     private final JButton stopButton = new JButton("Stop all cars");
 
-    private JFrame frame;
-    private CarModel model;
+    private final JFrame frame;
+    private final CarModel model;
 
     // Constructor
     public CarController(CarModel model, JFrame frame, int delay){

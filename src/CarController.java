@@ -2,6 +2,8 @@ import jdk.nashorn.internal.ir.Flags;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,162 +19,165 @@ import java.util.List;
 * modifying the model state and the updating the view.
  */
 
-public class CarController {
-    // member fields:
-    private final List<VehicleImage> vehicles;
-    private final CanMoveImages canMoveImages;
-    private final int xBoundary, yBoundary;
+public class CarController  {
+    private static final int X = 800;
+    private static final int Y = 800;
+    private static final int controlPanelSize = 240;
 
+    private final Timer timer;
+    private final int delay;
 
-    CarController(CanMoveImages canMoveImages, int xBoundary,int yBoundary) {
-        this.canMoveImages = canMoveImages;
-        this.vehicles = new ArrayList<>();
-        this.xBoundary = xBoundary;
-        this.yBoundary = yBoundary;
+    private final JPanel controlPanel = new JPanel();
+    private final JPanel gasPanel = new JPanel();
+    private JSpinner gasSpinner = new JSpinner();
+    private int gasAmount = 100;
+    private final JLabel gasLabel = new JLabel("Amount of gas");
+
+    private final JButton gasButton = new JButton("Gas");
+    private final JButton brakeButton = new JButton("Brake");
+    private final JButton turboOnButton = new JButton("Saab Turbo on");
+    private final JButton turboOffButton = new JButton("Saab Turbo off");
+    private final JButton liftBedButton = new JButton("Scania raise flatbed");
+    private final JButton lowerBedButton = new JButton("Scania Lower flatbed");
+
+    private final JButton startButton = new JButton("Start all cars");
+    private final JButton stopButton = new JButton("Stop all cars");
+
+    private JFrame frame;
+    private CarModel model;
+
+    // Constructor
+    public CarController(CarModel model, JFrame frame, int delay){
+        super();
+        this.frame = frame;
+        this.delay = delay;
+        this.model = model;
+        initComponents();
+
+        this.timer = new Timer(this.delay, new TimerListener());
     }
 
-    // Calls the gas method for each car once
-    void gas(int amount) {
-        double gas = ((double) amount) / 100;
-        for (VehicleImage vehicle : vehicles) {
-            try {
-                vehicle.getVehicle().gas(gas);
-            }catch(IllegalStateException e){
-                System.out.println(e.getMessage());
+    // Sets everything in place and fits everything
+    // TODO: Take a good look and make sure you understand how these methods and components work
+    private void initComponents() {
+        SpinnerModel spinnerModel =
+                new SpinnerNumberModel(100, //initial value
+                        0, //min
+                        100, //max
+                        1);//step
+        gasSpinner = new JSpinner(spinnerModel);
+        gasSpinner.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                gasAmount = (int) ((JSpinner)e.getSource()).getValue();
             }
-        }
+        });
+
+        gasPanel.setLayout(new BorderLayout());
+        gasPanel.add(gasLabel, BorderLayout.PAGE_START);
+        gasPanel.add(gasSpinner, BorderLayout.PAGE_END);
+
+        this.frame.add(gasPanel);
+
+        controlPanel.setLayout(new GridLayout(2,4));
+
+        controlPanel.add(gasButton, 0);
+        controlPanel.add(turboOnButton, 1);
+        controlPanel.add(liftBedButton, 2);
+        controlPanel.add(brakeButton, 3);
+        controlPanel.add(turboOffButton, 4);
+        controlPanel.add(lowerBedButton, 5);
+        controlPanel.setPreferredSize(new Dimension((X/2)+4, 200));
+        this.frame.add(controlPanel);
+        controlPanel.setBackground(Color.CYAN);
+
+
+        startButton.setBackground(Color.blue);
+        startButton.setForeground(Color.green);
+        startButton.setPreferredSize(new Dimension(X/5-15,200));
+        this.frame.add(startButton);
+
+
+        stopButton.setBackground(Color.red);
+        stopButton.setForeground(Color.black);
+        stopButton.setPreferredSize(new Dimension(X/5-15,200));
+        this.frame.add(stopButton);
+
+        setListeners();
+
+
+
     }
 
-    void brake(int amount) {
-        double brake = ((double) amount) / 100;
-        for (VehicleImage vehicle : vehicles) {
-            vehicle.getVehicle().brake(brake);
-        }
-    }
-
-    void startEngine(){
-        for (VehicleImage vehicle: vehicles){
-            try {
-                vehicle.getVehicle().startEngine();
-            }catch(IllegalStateException e){
-                System.out.println(e.getMessage());
+    private void setListeners() {
+        // This actionListener is for the gas button only
+        // TODO: Create more for each component as necessary
+        gasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.gas(gasAmount);
             }
-        }
-    }
+        });
 
-    void stopEngine() {
-        for (VehicleImage vehicle: vehicles) {
-            vehicle.getVehicle().stopEngine();
-        }
-    }
+        brakeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { model.brake(gasAmount);}
+        });
 
-    void turboOn() {
-        for (VehicleImage vehicle: vehicles) {
-            if(vehicle.getVehicle() instanceof Saab95){
-                ((Saab95) vehicle.getVehicle()).setTurboOn();
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { model.stopEngine();}
+        });
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.startEngine();
             }
-        }
-    }
+        });
 
-    void turboOff() {
-        for (VehicleImage vehicle: vehicles) {
-            if(vehicle.getVehicle() instanceof Saab95){
-                ((Saab95) vehicle.getVehicle()).setTurboOff();
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.stopEngine();
             }
-        }
-    }
+        });
 
-    void raiseFlatbed() {
-        for (VehicleImage vehicle: vehicles) {
-            if (vehicle.getVehicle() instanceof FlatbedCar) {
-                if(vehicle.getVehicle().getCurrentSpeed() == 0) {
-                    ((FlatbedCar) vehicle.getVehicle()).raiseFlatbed();
-                } else{ System.out.println("Stop " + vehicle.getClass().getName()+ " before raising the Flatbed");}
+        turboOnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.turboOn();
             }
-        }
-    }
+        });
 
-    void lowerFlatbed() {
-        for (VehicleImage vehicle: vehicles) {
-            if (vehicle.getVehicle() instanceof FlatbedCar) {
-                ((FlatbedCar) vehicle.getVehicle()).lowerFlatbed();
+        turboOffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.turboOff();
             }
-        }
-    }
-    public void add(Vehicle vehicle){
-        VehicleImage vehicleImage = new VehicleImage(vehicle);
-        this.vehicles.add(vehicleImage);
-        Point point = convertCoordinatesToPoint(vehicle);
-        this.canMoveImages.loadImage(vehicleImage.hashCode(),vehicleImage.getImage(), point);
-    }
+        });
 
-    private Point convertCoordinatesToPoint(Vehicle vehicle){
-        int x = (int) Math.round(vehicle.getXPosition());
-        int y = (int) Math.round(vehicle.getYPosition());
-        return new Point(x,y);
-    }
-
-    private boolean vehicleInsideBoundary(VehicleImage vehicle){
-        int xTrueBoundary = xBoundary - vehicle.getImage().getWidth();
-        int yTrueBoundary = yBoundary - vehicle.getImage().getHeight();
-        Point point = convertCoordinatesToPoint(vehicle.getVehicle());
-        return point.x >= 0 && point.x <= xTrueBoundary && point.y >= 0 && point.y <= yTrueBoundary;
-    }
-
-    public void update(){
-        for (VehicleImage vehicle : vehicles){
-            vehicle.getVehicle().move();
-
-            if(!vehicleInsideBoundary(vehicle)){
-                vehicle.getVehicle().turnRight();
-                vehicle.getVehicle().turnRight();
+        liftBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.raiseFlatbed();
             }
-            canMoveImages.moveImageLocation(vehicle.hashCode(), convertCoordinatesToPoint(vehicle.getVehicle()));
-        }
-    }
+        });
 
-    /*
-    private class VehicleImage {
-
-        Vehicle vehicle;
-        BufferedImage image;
-
-        VehicleImage(Vehicle vehicle) {
-            this.vehicle = vehicle;
-            loadImageFromDrive(vehicle);
-        }
-
-
-
-        private void loadImageFromDrive(Vehicle vehicle){
-            String filepath = "pics/" + vehicle.getClass().getName() + ".jpg";
-            BufferedImage loadedImage = new BufferedImage(100,100,1);
-            try {
-                 loadedImage = ImageIO.read(DrawPanel.class.getResourceAsStream(filepath));
-                 this.image = loadedImage;
-                 return;
-            } catch (IOException e){
-                e.printStackTrace();
+        lowerBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.lowerFlatbed();
             }
-            System.out.println("Error: Could not load vehicle image from " + filepath);
-        }
-
-        public Vehicle getVehicle() {
-            return vehicle;
-        }
-
-        public void setVehicle(Vehicle vehicle) {
-            this.vehicle = vehicle;
-        }
-
-        public BufferedImage getImage() {
-            return image;
-        }
-
-        public void setImage(BufferedImage image) {
-            this.image = image;
-        }
+        });
     }
 
-     */
+    public void startTimer() {
+        this.timer.start();
+    }
+
+    private class TimerListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            model.update();
+        }
+    }
 }

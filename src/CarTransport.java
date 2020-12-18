@@ -17,6 +17,11 @@ public class CarTransport extends FlatbedCar implements Transporter<Car> {
         this.storedCars = new LinkedList<Car>();
     }
 
+    public CarTransport(int x, int y){
+        this();
+        this.setXPosition(x);
+        this.setYPosition(y);
+    }
 
     @Override
     public void loadTransportable(Car carToLoad) {

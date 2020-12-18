@@ -1,7 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class CarView extends JPanel implements CarObserver{
     private JFrame frame;
@@ -25,8 +28,12 @@ public class CarView extends JPanel implements CarObserver{
     }
 
     @Override
-    public void actOnVehicleMovement(List<VehicleImage> vehicles) {
-        this.vehicles = vehicles;
+    public void actOnVehicleMovement(List<IVehicle> vehicles) {
+        List<VehicleImage> tempList = new ArrayList<>();
+        for (IVehicle vehicle : vehicles) {
+            tempList.add(new VehicleImage(vehicle));
+        }
+        this.vehicles = tempList;
         this.frame.repaint();
     }
 
@@ -39,7 +46,7 @@ public class CarView extends JPanel implements CarObserver{
         }
     }
 
-    private Point convertCoordinatesToPoint(Vehicle vehicle){
+    private Point convertCoordinatesToPoint(IVehicle vehicle){
         int x = (int) Math.round(vehicle.getXPosition());
         int y = (int) Math.round(vehicle.getYPosition());
         return new Point(x,y);

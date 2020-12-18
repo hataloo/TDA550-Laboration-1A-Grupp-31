@@ -17,9 +17,9 @@ public class CarObserverComposite implements CarObserver{
         carObservers.remove(c);
     }
 
-    public void actOnVehicleMovement(List<VehicleImage> vehicleImages){
+    public void actOnVehicleMovement(List<IVehicle> vehicles){
         for (CarObserver carObserver : carObservers) {
-            carObserver.actOnVehicleMovement(vehicleImages);
+            carObserver.actOnVehicleMovement(vehicles);
         }
     }
 

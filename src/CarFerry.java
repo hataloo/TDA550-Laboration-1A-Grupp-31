@@ -16,8 +16,21 @@ public class CarFerry extends Vehicle implements Transporter<Car> {
     public CarFerry(int capacity) {
         this.capacity = capacity;
         this.carsOnFerry = new ArrayList<Car>(this.capacity);
-        this.setMagnitude(9);
+        this.setMagnitude(30);
     }
+
+    public CarFerry(int x, int y){
+        this();
+        this.setXPosition(x);
+        this.setYPosition(y);
+    }
+    public CarFerry(int x, int y, int capacity){
+        this(capacity);
+        this.setXPosition(x);
+        this.setYPosition(y);
+    }
+
+
     public int getCapacity(){
         return this.capacity;
     }

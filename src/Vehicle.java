@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public abstract class Vehicle implements Movable {
+public abstract class Vehicle implements Movable, IVehicle {
 
     private int magnitude;
     /**
@@ -45,7 +45,7 @@ public abstract class Vehicle implements Movable {
         this.enginePower = enginePower;
     }
 
-    protected double getCurrentSpeed() {
+    public double getCurrentSpeed() {
         return currentSpeed;
     }
 
@@ -53,7 +53,7 @@ public abstract class Vehicle implements Movable {
         this.currentSpeed = currentSpeed;
     }
 
-    protected double getXPosition() {
+    public double getXPosition() {
         return xPosition;
     }
 
@@ -61,7 +61,7 @@ public abstract class Vehicle implements Movable {
         this.xPosition = xPosition;
     }
 
-    protected double getYPosition() {
+    public double getYPosition() {
         return yPosition;
     }
 
@@ -149,6 +149,7 @@ public abstract class Vehicle implements Movable {
      *
      * @param amount double in the range [0,1]
      */
+    @Override
     public void gas(double amount) {
         if (amount <= 1 && amount >= 0) {
             incrementSpeed(amount);
@@ -162,6 +163,7 @@ public abstract class Vehicle implements Movable {
      *
      * @param amount double in the range [0,1]
      */
+    @Override
     public void brake(double amount){
         if(amount <= 1 && amount >= 0) {
             decrementSpeed(amount);
